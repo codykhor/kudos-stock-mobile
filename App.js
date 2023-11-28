@@ -1,11 +1,35 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import * as React from "react";
+import { Platform, StyleSheet, View, StatusBar } from "react-native";
+import {
+  NavigationContainer,
+  DarkTheme,
+  DefaultTheme,
+} from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import BottomTabNavigator from "./src/navigation/BottomTabNavigator";
+import { StocksProvider } from "./src/contexts/StocksContext";
+import "react-native-gesture-handler";
+import DetailScreen from "./src/screens/DetailScreen";
 
-export default function App() {
+const Stack = createStackNavigator();
+
+export default function App(props) {
   return (
     <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
+      <StocksProvider>
+        {Platform.OS === "ios" && <StatusBar barStyle="default" />}
+        <NavigationContainer theme={DarkTheme}>
+          {/* <BottomTabNavigator /> */}
+          <Stack.Navigator>
+            <Stack.Screen
+              name=" "
+              component={BottomTabNavigator}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen name="Stock Details" component={DetailScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </StocksProvider>
     </View>
   );
 }
@@ -13,8 +37,5 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
